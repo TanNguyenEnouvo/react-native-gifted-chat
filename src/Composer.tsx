@@ -1,6 +1,12 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { Platform, StyleSheet, TextInput, TextInputProps } from 'react-native'
+import {
+  Platform,
+  StyleSheet,
+  TextInput,
+  TextInputProps,
+  View,
+} from 'react-native'
 import { MIN_COMPOSER_HEIGHT, DEFAULT_PLACEHOLDER } from './Constant'
 import Color from './Color'
 import { StylePropType } from './utils'
@@ -74,6 +80,7 @@ export default class Composer extends React.Component<ComposerProps> {
     textInputStyle: StylePropType,
     textInputAutoFocus: PropTypes.bool,
     keyboardAppearance: PropTypes.string,
+    children: PropTypes.any,
   }
 
   contentSize?: { width: number; height: number } = undefined
@@ -103,38 +110,46 @@ export default class Composer extends React.Component<ComposerProps> {
 
   render() {
     return (
-      <TextInput
-        testID={this.props.placeholder}
-        accessible
-        accessibilityLabel={this.props.placeholder}
-        placeholder={this.props.placeholder}
-        placeholderTextColor={this.props.placeholderTextColor}
-        multiline={this.props.multiline}
-        editable={!this.props.disableComposer}
-        onChange={this.onContentSizeChange}
-        onContentSizeChange={this.onContentSizeChange}
-        onChangeText={this.onChangeText}
+      <View
         style={[
-          styles.textInput,
-          this.props.textInputStyle,
-          {
-            height: this.props.composerHeight,
-            ...Platform.select({
-              web: {
-                outlineWidth: 0,
-                outlineColor: 'transparent',
-                outlineOffset: 0,
-              },
-            }),
-          },
+          { flexDirection: 'row', alignItems: 'center', flex: 1 },
+          this.props.composerStyle,
         ]}
-        autoFocus={this.props.textInputAutoFocus}
-        value={this.props.text}
-        enablesReturnKeyAutomatically
-        underlineColorAndroid='transparent'
-        keyboardAppearance={this.props.keyboardAppearance}
-        {...this.props.textInputProps}
-      />
+      >
+        <TextInput
+          testID={this.props.placeholder}
+          accessible
+          accessibilityLabel={this.props.placeholder}
+          placeholder={this.props.placeholder}
+          placeholderTextColor={this.props.placeholderTextColor}
+          multiline={this.props.multiline}
+          editable={!this.props.disableComposer}
+          onChange={this.onContentSizeChange}
+          onContentSizeChange={this.onContentSizeChange}
+          onChangeText={this.onChangeText}
+          style={[
+            styles.textInput,
+            this.props.textInputStyle,
+            {
+              height: this.props.composerHeight,
+              ...Platform.select({
+                web: {
+                  outlineWidth: 0,
+                  outlineColor: 'transparent',
+                  outlineOffset: 0,
+                },
+              }),
+            },
+          ]}
+          autoFocus={this.props.textInputAutoFocus}
+          value={this.props.text}
+          enablesReturnKeyAutomatically
+          underlineColorAndroid='transparent'
+          keyboardAppearance={this.props.keyboardAppearance}
+          {...this.props.textInputProps}
+        />
+        {this.props.children}
+      </View>
     )
   }
 }
